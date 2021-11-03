@@ -7,8 +7,6 @@
 
 - pip install -r requirements.txt (Python 2)
 
-or
-
 - pip3 install -r requirements.txt (Python 3)
 
 # Chạy File bằng cách gõ câu lệnh bên dưới vào command line
