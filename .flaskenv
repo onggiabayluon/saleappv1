@@ -1,0 +1,2 @@
+export FLASK_APP=saleapp
+export FLASK_ENV=development

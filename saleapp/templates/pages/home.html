@@ -1,0 +1,41 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<title>{{ title }}</title> 
+<!-- bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- main css -->
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+{% endblock head %}
+
+
+{% block body %}
+<main class="main" id="main">
+    <section class="products container mt-4" id="products">
+        <h1>Bán hàng trực tuyến</h1>
+        <div class="row mt-4">
+            {% for product in products %}
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3 p-4">
+                <div class="card">
+                    <img class="card-img-top" src="{{ product.image }}" alt="Card image cap">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <a href="#" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</main> 
+{% endblock body %}
+
+{% block scripts %}
+<!-- bootstrap scripts -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+{% endblock scripts %}
