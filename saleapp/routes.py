@@ -37,18 +37,32 @@ def products():
 @app.route('/search', methods=['GET'])
 def search():
     # get parameters
-    keyword = request.args.get('keyword').lower()
+    keyword = request.args.get('keyword', 'nokeyword').lower()
+    from_price = int(request.args.get('from_price', 0))
+    to_price = int(request.args.get('to_price', 0))
+    isNameSearch = True if (keyword != 'nokeyword') else False
+
+    # Compare function
+    def rangeCompare(product_price):
+        return ((product_price >= from_price) and (product_price <= to_price))
 
     # Transform json input to python objects
     input_products = utils.load_data("data/products.json")
 
-    # Filter python objects with list comprehensions
-    output_products = [
-        product for product in input_products if product["name"].lower().find(keyword) >= 0 
-    ]
+    # Filter by name or by price
+    if (isNameSearch):
+        print('true')
+        output_products = [
+            product for product in input_products if product["name"].lower().find(keyword) >= 0
+        ]
+    else:
+         output_products = [
+            product for product in input_products if rangeCompare(product["price"])
+        ]
 
     return render_template(
-        "./pages/products.html",
-        title='%s Giá tốt nhất' % keyword,
-        products=output_products,
+        "./pages/search.html",
+        title=('%s Giá tốt nhất' % keyword) if isNameSearch else ('%s VNĐ đến %s VNĐ' % (from_price, to_price)),
+        products=input_products,
+        filtered_products=output_products,
     )
