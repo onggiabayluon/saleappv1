@@ -1,13 +1,15 @@
-# 1. Install Dependency
+# Install Dependency
 1. For Window
-...pip install -r requirements.txt 
+
+⋅⋅⋅pip install -r requirements.txt 
 
 2. For Linux 
-...pip install -r requirements.txt (Python 2)
-...or
-...pip3 install -r requirements.txt (Python 3)
 
-# 2. Chạy File bằng cách gõ câu lệnh bên dưới vào command line
+⋅⋅⋅pip install -r requirements.txt (Python 2)
+⋅⋅⋅or
+⋅⋅⋅pip3 install -r requirements.txt (Python 3)
+
+# Chạy File bằng cách gõ câu lệnh bên dưới vào command line
 Flask run
 
 [Link mở Localhost](http://127.0.0.1:5000/)
