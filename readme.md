@@ -8,7 +8,7 @@ Flask run
 [Link Localhost](http://127.0.0.1:5000/)
 
 # Config Environtment variables
-File .flaskenv đã được config environment variables đường dẫn đến thư mục gốc là saleapp ( nếu muốn sửa tên thư mục gốc là src thì sửa lại FLASK_APP=src )
+File .flaskenv đã được config sẵn đến thư mục làm việc gốc là saleapp ( nếu muốn sửa tên thư mục gốc là src thì sửa lại FLASK_APP=src )
 
 FLASK_APP=saleapp
 
