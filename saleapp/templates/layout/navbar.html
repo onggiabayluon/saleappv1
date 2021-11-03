@@ -24,9 +24,11 @@
             name="keyword" type="search" 
             placeholder="Search" aria-label="Search">
             <datalist id="suggestion">
-                <option value="iPad Pro 2020">iPad Pro 2020</option>
-                <option value="iPhone 7 Plus">iPhone 7 Plus</option>
-                <option value="Ipad">Ipad</option>
+                {% if products %}    
+                {% for product in products[:10] %}
+                <option value="{{ product.name }}">{{ product.name }}</option>
+                {% endfor %}
+                {% endif %}
             </datalist>
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>

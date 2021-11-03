@@ -11,10 +11,26 @@
 
 {% block body %}
 <main class="main" id="main">
-    <section class="products container mt-4" id="products">
-        <h1>Bán hàng trực tuyến</h1>
+    <section class="products container" id="products">
+        
         <div class="row mt-4">
-            {% for product in products %}
+            <form class="form-inline my-2 my-lg-0 col-12" action="/search">
+                <div class="from_price col-6">
+                    <p>From price:</p>
+                    <input type="range" name="from_price" min="1" max="100000000" value="10000" class="slider" oninput="this.nextElementSibling.value = this.value">
+                    <output>10000</output>
+                </div>
+                <div class="to_price col-6">
+                    <p>to price:</p>
+                    <input type="range" name="to_price" min="1" max="100000000" value="25000000" class="slider" oninput="this.nextElementSibling.value = this.value">
+                    <output>25000000</output>
+                </div>
+                <button class="btn btn-block btn-outline-success my-2 mt-4" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="row mt-4">
+            {% if filtered_products %}    
+            {% for product in filtered_products %}
             <div class="col-6 col-sm-6 col-md-4 col-lg-3 p-4">
                 <div class="card">
                     <img class="card-img-top" src="{{ product.image }}" alt="Card image cap">
@@ -27,16 +43,18 @@
                 </div>
             </div>
             {% endfor %}
+            {% else %}
+            <h3 class="col-12 text-center"> Không tìm thấy kết quả nào </h3>
+            {% endif %}
         </div>
     </section>
 </main> 
 {% endblock body %}
+
 
 {% block scripts %}
 <!-- bootstrap scripts -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-
 {% endblock scripts %}
