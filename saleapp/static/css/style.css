@@ -1,3 +1,19 @@
+/* :root {
+  --theme-color-1: #86C232;
+  --theme-color-2: #61892F;
+  --background-color: #222629;
+  --primary-color: #6B6E70;
+  --secondary-color: #474B4F;
+}
+
+h1,h2,h3,h4,h5 {
+  color: #fff;
+}
+
+html,body {
+  background: var(--background-color);
+} */
+
 .slidecontainer {
     width: 100%;
   }
