@@ -1,7 +1,6 @@
 from flask.templating import render_template
 from flask import request
 from saleapp import app, utils
-import sys, json
 
 @app.route('/')
 def home():
@@ -19,7 +18,7 @@ def home():
 @app.route('/products', methods=['GET'])
 def products():
     # get parameters
-    _id = int(request.args.get('category_id')) if request.args.get('category_id') else None
+    _id = int(request.args.get('category_id', 0))
 
     # Transform json input to python objects
     input_products = utils.load_data("data/products.json")
@@ -51,7 +50,6 @@ def search():
 
     # Filter by name or by price
     if (isNameSearch):
-        print('true')
         output_products = [
             product for product in input_products if product["name"].lower().find(keyword) >= 0
         ]
