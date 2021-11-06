@@ -36,31 +36,34 @@ def products():
 @app.route('/search', methods=['GET'])
 def search():
     # get parameters
-    keyword = request.args.get('keyword', 'nokeyword').lower()
+    keyword = request.args.get('keyword', 'undefined').lower()
     from_price = int(request.args.get('from_price', 0))
     to_price = int(request.args.get('to_price', 0))
-    isNameSearch = True if (keyword != 'nokeyword') else False
+    searchByName = True if (keyword != 'undefined') else False 
 
     # Compare function
-    def rangeCompare(product_price):
+    def compareByName(product_name):
+        return (product_name.lower().find(keyword) >= 0)
+
+    def compareByPrice(product_price):
         return ((product_price >= from_price) and (product_price <= to_price))
 
     # Transform json input to python objects
     input_products = utils.load_data("data/products.json")
 
     # Filter by name or by price
-    if (isNameSearch):
+    if (searchByName):
         output_products = [
-            product for product in input_products if product["name"].lower().find(keyword) >= 0
+            product for product in input_products if compareByName(product["name"])
         ]
     else:
          output_products = [
-            product for product in input_products if rangeCompare(product["price"])
+            product for product in input_products if compareByPrice(product["price"])
         ]
 
     return render_template(
         "./pages/search.html",
-        title=('%s Giá tốt nhất' % keyword) if isNameSearch else ('%s VNĐ đến %s VNĐ' % (from_price, to_price)),
+        title=('%s Giá tốt nhất' % keyword) if searchByName else ('%s VNĐ đến %s VNĐ' % (from_price, to_price)),
         products=input_products,
         filtered_products=output_products,
     )
