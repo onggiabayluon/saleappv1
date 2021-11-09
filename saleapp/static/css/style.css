@@ -53,3 +53,13 @@ output::after {
   content: "VNĐ";
   margin-left: 0.5em;
 }
+
+
+
+/*
+Footer
+*/
+
+.products {
+  min-height: 100vh;
+}
