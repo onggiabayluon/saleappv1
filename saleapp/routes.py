@@ -1,16 +1,19 @@
 from flask.templating import render_template
 from flask import request
 from saleapp import app, utils
+# Import admin 
+from saleapp.admin import *
+
 
 @app.route('/')
 def home():
+    print(utils.load_products())
     # Load all Products
-    products = utils.load_data("data/products.json")
     return render_template(
         "./pages/home.html",
         title="Tất cả sản phẩm",
-        products=products,
-        categories=utils.load_data("data/categories.json")
+        products=utils.load_products(),
+        categories=utils.load_categories()
     )
 
 
@@ -20,11 +23,8 @@ def products():
     # get parameters
     _id = int(request.args.get('category_id', 0))
 
-    # Transform json input to python objects
-    input_products = utils.load_data("data/products.json")
-
     # Filter python objects with list comprehensions
-    output_products = [product for product in input_products if product["category_id"] == _id ]
+    output_products = utils.load_products_by_categoryId(_id)
 
     return render_template(
         "./pages/products.html",
@@ -41,29 +41,15 @@ def search():
     to_price = int(request.args.get('to_price', 0))
     searchByName = True if (keyword != 'undefined') else False 
 
-    # Compare function
-    def compareByName(product_name):
-        return (product_name.lower().find(keyword) >= 0)
-
-    def compareByPrice(product_price):
-        return ((product_price >= from_price) and (product_price <= to_price))
-
-    # Transform json input to python objects
-    input_products = utils.load_data("data/products.json")
-
     # Filter by name or by price
     if (searchByName):
-        output_products = [
-            product for product in input_products if compareByName(product["name"])
-        ]
+        output_products = utils.load_products(keyword)
     else:
-         output_products = [
-            product for product in input_products if compareByPrice(product["price"])
-        ]
+        output_products = utils.load_products_by_price(from_price, to_price)
 
     return render_template(
         "./pages/search.html",
         title=('%s Giá tốt nhất' % keyword) if searchByName else ('%s VNĐ đến %s VNĐ' % (from_price, to_price)),
-        products=input_products,
+        products=utils.load_products(),
         filtered_products=output_products,
     )
