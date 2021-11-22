@@ -21,3 +21,8 @@ FLASK_APP=saleapp
 
 FLASK_ENV=development
 
+# (optional) run specific file in vscode as __main__
+python -m saleapp.models
+
+# (optional) export dependency to requirement.txt
+pip freeze > requirements.txt

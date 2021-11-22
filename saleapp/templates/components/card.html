@@ -1,0 +1,11 @@
+{% macro card(image, name, description, price) -%}
+    <div class="card">
+        <img class="card-img-top" src="{{ image }}" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="card-title">{{ name }}</h5>
+        <p class="card-text">{{ description }}</p>
+        <p class="card-price">{{ price }} VNĐ</p>
+        <a href="#" class="btn btn-primary">Details</a>
+        </div>
+    </div>
+{%- endmacro %}
