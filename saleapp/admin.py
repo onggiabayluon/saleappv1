@@ -1,5 +1,5 @@
 from saleapp import admin, db
-from saleapp.models import Category, Product, Tag
+from saleapp.models import Category, Product, Tag, User
 from flask_admin.contrib.sqla import ModelView
 
 # Custom Views Config 
@@ -14,4 +14,5 @@ class ProductView(ModelView):
 
 admin.add_view(ModelView(Category, db.session))
 admin.add_view(ProductView(Product, db.session))
+admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Tag, db.session))
