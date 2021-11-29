@@ -1,10 +1,14 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float
+from enum import Enum as UserEnum
+
+from flask_login import UserMixin
+from sqlalchemy import Column, Enum, Float, Integer, String
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql.schema import ForeignKey
-from sqlalchemy.sql.sqltypes import DateTime
+from sqlalchemy.sql.sqltypes import Boolean, DateTime, Enum
 
 from saleapp import db
+
 
 class BaseModel(db.Model):
     # Bảng trung gian cho các bảng khác, và không muốn tạo bảng này khi db.create_all()
@@ -35,6 +39,7 @@ class Product(BaseModel):
     description = Column(String(255), nullable=False)
     price = Column(Float, default=0)
     image = Column(String(255), nullable=False)
+    active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.now())
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
     # lazy=subquery: Truy cập 1 product tự động truy vấn danh sach tags luôn
@@ -51,28 +56,44 @@ class Tag(BaseModel):
         return self.name
 
 
+class UserRole(UserEnum):
+    ADMIN = 1
+    USER = 2
+
+
+class User(BaseModel, UserMixin):
+    name = Column(String(50), nullable=False)
+    username = Column(String(50), nullable=False, unique=True)
+    password = Column(String(50), nullable=False)
+    email = Column(String(50), nullable=False)
+    active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.now())
+    avatar = Column(String(100))
+    user_role = Column(Enum(UserRole), default=UserRole.USER)
+    def __str__(self):
+        return self.name
 
 
 
 
 if __name__ == '__main__':
-    # db.create_all()
-    c1 = Category(name="Mobile")
-    c2 = Category(name="tablet")
+    db.create_all()
+    # c1 = Category(name="Mobile")
+    # c2 = Category(name="tablet")
 
-    p1 = Product(name='Mobile',description='Apple, 32GB, RAM: 3GB, iOS13',price="17000000",image='https://cdn.tgdd.vn/Products/Images/42/78124/iphone-7-plus-gold-400x460-400x460.png',category_id=1)
-    p2 = Product(name='iPad Pro 2020',description='Apple, 128GB, RAM: 6GB',price="37000000",image='https://cdn.tgdd.vn/Products/Images/522/221775/ipad-pro-12-9-inch-wifi-128gb-2020-xam-400x460-1-400x460.png', category_id= 2)
+    # p1 = Product(name='Mobile',description='Apple, 32GB, RAM: 3GB, iOS13',price="17000000",image='https://cdn.tgdd.vn/Products/Images/42/78124/iphone-7-plus-gold-400x460-400x460.png',category_id=1)
+    # p2 = Product(name='iPad Pro 2020',description='Apple, 128GB, RAM: 6GB',price="37000000",image='https://cdn.tgdd.vn/Products/Images/522/221775/ipad-pro-12-9-inch-wifi-128gb-2020-xam-400x460-1-400x460.png', category_id= 2)
     
-    t1 = Tag(name='new')
-    t2 = Tag(name='promotion')
+    # t1 = Tag(name='new')
+    # t2 = Tag(name='promotion')
 
-    db.session.add(c1)
-    db.session.add(c2)
+    # db.session.add(c1)
+    # db.session.add(c2)
 
-    db.session.add(p1)
-    db.session.add(p2)
+    # db.session.add(p1)
+    # db.session.add(p2)
 
-    db.session.add(t1)
-    db.session.add(t2)
+    # db.session.add(t1)
+    # db.session.add(t2)
 
-    db.session.commit()
+    # db.session.commit()

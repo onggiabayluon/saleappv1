@@ -1,37 +1,62 @@
-import json
-import os
+import hashlib
 
-from saleapp import app
-from saleapp.models import Category, Product
+from saleapp import app, db
+from saleapp.models import Category, Product, User
 
-
-# Read Json file
-def read_json(path):
-    with open(path, "r") as file:
-        return json.load(file)
-
-# load data
-def load_data(dataPath): 
-    return read_json(os.path.join(app.root_path, dataPath))
-
-# Transform python object back into json
-# output_json = json.dumps(output_products)
 
 # load products
-def load_products(name=''): 
-    return Product.query.filter(Product.name.contains(name)).all()
+def load_products(category_id=None, name=None, from_price=None, to_price=None, page=1):
+    products = Product.query.filter(Product.active.__eq__(True))
 
-# load categories
-def load_categories(name=''): 
-    return Category.query.filter(Category.name.contains(name)).all()
+    if category_id:
+        products = products.filter(Product.category_id.__eq__(category_id))
+    
+    if name:
+        products = products.filter(Product.name.__eq__(name))
+    
+    if from_price:
+        products = products.filter(Product.price.__ge__(from_price))
+    
+    if to_price:
+        products = products.filter(Product.price.__le__(to_price))
+    
+    page_size = app.config['PAGE_SIZE']
+    start = (page - 1) * page_size
+    end = start + page_size
 
-# load products by price
-def load_products_by_categoryId(categoryId): 
-    return Product.query.filter(Product.category_id == categoryId).all()
+    return products.slice(start, end).all()
 
-# load products by price
-def load_products_by_price(from_price, to_price): 
-    return Product.query.filter(
-        Product.price.__gt__(from_price),
-        Product.price.__lt__(to_price),
-    ).all()
+
+def count_products():
+    return Product.query.count()
+
+
+def load_categories():
+    return Category.query.all()
+
+
+def check_login(username, password):
+    if username and password:
+        password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+
+        return User.query.filter(
+            User.username.__eq__(username),
+            User.password.__eq__(password)
+        ).first()
+
+
+def get_user_by_id(user_id):
+    return User.query.get(user_id)
+
+
+def addUser(name, username, password, **kwargs):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    user = User(
+        name=name, 
+        username=username, 
+        password=password, 
+        email=kwargs.get('email'), 
+        avatar=kwargs.get('avatar'))
+    
+    db.session.add(user)
+    db.session.commit()
