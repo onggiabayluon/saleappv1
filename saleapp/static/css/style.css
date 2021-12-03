@@ -130,8 +130,8 @@ output::after {
 .avatar {
   position: relative;
   display: inline-block;
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   font-size: 1rem;
 }
 

@@ -1,7 +1,11 @@
 import hashlib
 
+from flask_login import current_user
+from sqlalchemy.sql.functions import func
+
 from saleapp import app, db
-from saleapp.models import Category, Product, User
+from saleapp.models import (Category, Product, Receipt, ReceiptDetail, User,
+                            UserRole)
 
 
 # load products
@@ -35,7 +39,7 @@ def load_categories():
     return Category.query.all()
 
 
-def check_login(username, password):
+def check_login(username, password, role=UserRole.USER):
     if username and password:
         password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
@@ -60,3 +64,43 @@ def addUser(name, username, password, **kwargs):
     
     db.session.add(user)
     db.session.commit()
+
+def cate_stats():
+    return Category.query.join(Product,
+                               Product.category_id.__eq__(Category.id),
+                               isouter=True)\
+                    .add_columns(func.count(Product.id))\
+                    .group_by(Category.id).all()
+
+def cate_stats2():
+    return db.session.query(Category.id, Category.name, func.count(Product.id))\
+        .join(Product, Product.category_id.__eq__(Category.id), isouter=True)\
+        .group_by(Category.id, Category.name).all()
+
+
+def get_cart_checkout(carts):
+    total_quantity, total_amount = 0, 0
+
+    if carts:
+        for cart in carts.values():
+            total_quantity += cart['quantity']
+            total_amount += cart['quantity'] * cart['price']
+
+    return {
+        'total_quantity': total_quantity,
+        'total_amount': total_amount
+    }
+
+def add_receipt(carts):
+    if carts:
+        receipt = Receipt(user=current_user)
+        db.session.add(receipt)
+        
+        for cart in carts.values():
+            receipt_detail = ReceiptDetail(receipt=receipt,
+                              product_id=cart['id'],
+                              quantity=cart['quantity'],
+                              unit_price=cart['price'])
+            db.session.add(receipt_detail)
+
+        db.session.commit()

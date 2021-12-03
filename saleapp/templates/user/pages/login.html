@@ -1,0 +1,102 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<title>{{ title }}</title>
+
+{% endblock head %}
+
+
+
+{% block body %}
+<div class="jumbotron color-grey-light mt-70">
+    <div class="d-flex align-items-center h-100">
+        <div class="container text-center py-5">
+            <h3 class="mb-0">Sign in</h3>
+        </div>
+    </div>
+</div>
+
+<section class="login container mt-4" id="login">
+
+    {% include './user/layout/error_msg.html' %}
+
+    <div class="row d-flex justify-content-center">
+
+        <!--Grid column-->
+        <div class="col-md-6">
+
+            <!--Section: Content-->
+            <section class="mb-5">
+
+                <form method="post" action="{{ url_for('user_login') }}">
+
+                    <div class="md-form md-outline">
+                        <input name="username" type="username" id="defaultForm-username" class="form-control">
+                        <label data-error="wrong" data-success="right" for="defaultForm-email1">Your username</label>
+                    </div>
+                    <div class="md-form md-outline">
+                        <input name="password" type="password" id="defaultForm-pass1" class="form-control">
+                        <label data-error="wrong" data-success="right" for="defaultForm-pass1">Your password</label>
+                    </div>
+
+
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+
+                        <div class="form-check pl-0 mb-3">
+                            <input type="checkbox" class="form-check-input filled-in" id="new">
+                            <label class="form-check-label small text-uppercase card-link-secondary" for="new">Remember
+                                me</label>
+                        </div>
+
+                        <p><a href="">Forgot password?</a></p>
+
+                    </div>
+
+                    <div class="text-center pb-2">
+
+                        <button type="submit" class="btn btn-primary mb-4 waves-effect waves-light">Sign in</button>
+
+                        <p>Not a member? <a href="{{ url_for('user_register') }}">Register</a></p>
+
+                        <p>or sign in with:</p>
+
+                        <a type="button" class="btn-floating btn-fb btn-sm mr-1 waves-effect waves-light">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a type="button" class="btn-floating btn-tw btn-sm mr-1 waves-effect waves-light">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a type="button" class="btn-floating btn-li btn-sm mr-1 waves-effect waves-light">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a type="button" class="btn-floating btn-git btn-sm waves-effect waves-light">
+                            <i class="fab fa-github"></i>
+                        </a>
+
+                    </div>
+                </form>
+            </section>
+            <!--Section: Content-->
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+
+</section>
+<!--Section: Content-->
+
+</div>
+<!--Grid column-->
+
+</div>
+</section>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+    document.getElementById("navbar").classList.remove("navbar-transparent");
+</script>
+{% endblock scripts %}
