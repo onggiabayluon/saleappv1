@@ -1,0 +1,173 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<title>{{ title }}</title>
+{% endblock head %}
+
+
+{% block body %}
+<div class="jumbotron color-grey-light mt-70">
+    <div class="d-flex align-items-center h-100">
+        <div class="container text-center py-5">
+            <h3 class="mb-0">Sign up</h3>
+        </div>
+    </div>
+</div>
+
+<section class="register container mt-4" id="register">
+
+    {% include './user/layout/error_msg.html' %}
+
+    <div class="row d-flex justify-content-center">
+
+        <!--Grid column-->
+        <div class="col-md-6">
+
+            <!--Section: Content-->
+            <section class="mt-4 mb-5">
+
+                <form action="#!">
+
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="md-form md-outline mt-0">
+                                <input name="name" type="text" id="materialRegisterFormFirstName" class="form-control">
+                                <label for="materialRegisterFormFirstName">Full name</label>
+                            </div>
+                        </div>
+                        <!-- <div class="col">
+                            <div class="md-form md-outline mt-0">
+                                <input type="email" id="materialRegisterFormLastName" class="form-control">
+                                <label for="materialRegisterFormLastName">Last name</label>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="md-form md-outline mt-0">
+                        <input name="email" type="email" id="defaultForm-email2" class="form-control">
+                        <label data-error="wrong" data-success="right" for="defaultForm-email2">Your email</label>
+                    </div>
+                    <div class="md-form md-outline mt-0">
+                        <input name="username" type="text" id="defaultForm-username" class="form-control">
+                        <label data-error="wrong" data-success="right" for="defaultForm-username">Your username</label>
+                    </div>
+                    <div class="md-form md-outline mt-0">
+                        <input name="password" type="password" id="defaultForm-pass2" class="form-control">
+                        <label data-error="wrong" data-success="right" for="defaultForm-pass2">Your password</label>
+                        <small id="materialRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+                            At least 8 characters and 1 digit
+                        </small>
+                    </div>
+                    <div class="md-form md-outline mt-0">
+                        <input name="confirm" type="password" id="defaultForm-confirm" class="form-control">
+                        <label data-error="wrong" data-success="right" for="defaultForm-confirm">Confirm password</label>
+                    </div>
+
+                    <!-- <div class="md-form md-outline">
+                        <input type="number" id="materialRegisterFormPhone" class="form-control"
+                            aria-describedby="materialRegisterFormPhoneHelpBlock">
+                        <label for="materialRegisterFormPhone">Phone number</label>
+                        <small id="materialRegisterFormPhoneHelpBlock" class="form-text text-muted mb-3">
+                            Optional - for two step authentication
+                        </small>
+                    </div> -->
+
+
+
+                    <div class="text-center mb-2">
+
+                        <button type="submit" class="btn btn-primary mb-4 waves-effect waves-light">Sign Up</button>
+
+                        <p>or sign up with:</p>
+
+                        <a type="button" class="btn-floating btn-fb btn-sm mr-1 waves-effect waves-light">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a type="button" class="btn-floating btn-tw btn-sm mr-1 waves-effect waves-light">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a type="button" class="btn-floating btn-li btn-sm mr-1 waves-effect waves-light">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a type="button" class="btn-floating btn-git btn-sm waves-effect waves-light">
+                            <i class="fab fa-github"></i>
+                        </a>
+
+                        <hr class="mt-4">
+
+                        <p>By clicking
+                            <em>Sign up</em> you agree to our
+                            <a href="">terms of service</a>
+                        </p>
+
+                    </div>
+
+                </form>
+            </section>
+            <!--Section: Content-->
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+
+    <!-- <form method="post" action="{{ url_for('user_register') }}" enctype="multipart/form-data">
+            
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+                </div>
+                <input name="email" type="email" placeholder="Email" class="form-control" id="email">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-signature"></i></i></span>
+                </div>
+                <input name="name" type="text" placeholder="Full Name" class="form-control" id="name">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></i></span>
+                </div>
+                <input name="username" type="text" placeholder="UserName" class="form-control" id="username">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
+                </div>
+                <input name="password" type="password" placeholder="Password" class="form-control" id="password">
+            </div>
+            
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
+                </div>
+                <input name="confirm" type="password" placeholder="Confirm Password" class="form-control" id="confirm">
+            </div>
+
+            <div class="input-group mb-3">
+                <input name="avatar" type="file" class="custom-file-input" id="avatar"
+                    onchange="document.getElementById('preview').src = window.URL.createObjectURL(this.files[0])">
+                <img id="preview" class="img-fluid" />
+                <label class="custom-file-label" for="inputGroupFile03">Click to upload Avatar</label>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox"> Remember me
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form> -->
+</section>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+    document.getElementById("navbar").classList.remove("navbar-transparent");
+</script>
+{% endblock scripts %}

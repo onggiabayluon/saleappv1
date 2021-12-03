@@ -6,8 +6,20 @@ from sqlalchemy import Column, Enum, Float, Integer, String
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Boolean, DateTime, Enum
+from sqlalchemy.types import TypeDecorator
 
 from saleapp import db
+
+# custom augmented string type: Strip String
+# class String(TypeDecorator):
+#     impl = db.String
+
+#     def process_bind_param(self, value, dialect):
+#         # In case you have nullable String fields and pass None
+#         return value.strip() if value else value
+
+#     def copy(self, **kw):
+#         return String(self.impl.length)
 
 
 class BaseModel(db.Model):
@@ -42,12 +54,14 @@ class Product(BaseModel):
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.now())
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
+    receipt_details = relationship('ReceiptDetail', backref='product', lazy=True)
     # lazy=subquery: Truy cập 1 product tự động truy vấn danh sach tags luôn
     # backref (lazy=true): Bấm tag nào thì mới query product của tag đó
     # chứ không truy vấn tag và product cùng 1 lúc khi 
     tags = relationship('Tag', secondary='product_tag', lazy='subquery', 
                         backref=backref('products', lazy=True)) 
-
+    def __str__(self):
+            return self.name
 
 class Tag(BaseModel):
     __tablename__ = "tag"
@@ -70,11 +84,23 @@ class User(BaseModel, UserMixin):
     created_at = Column(DateTime, default=datetime.now())
     avatar = Column(String(100))
     user_role = Column(Enum(UserRole), default=UserRole.USER)
+    receipts = relationship('Receipt', backref='user', lazy=True)
+
     def __str__(self):
         return self.name
 
 
+class Receipt(BaseModel):
+    created_at = Column(DateTime, default=datetime.now())
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    details = relationship('ReceiptDetail', backref='receipt', lazy=True)
+    
 
+class ReceiptDetail(db.Model):
+    receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False, primary_key=True)
+    product_id = Column(Integer, ForeignKey(Product.id), nullable=False, primary_key=True)
+    quantity = Column(Integer, default=0)
+    unit_price = Column(Float, default=0)
 
 if __name__ == '__main__':
     db.create_all()

@@ -1,0 +1,81 @@
+<!-- Navbar -->
+<nav id="navbar" class="navbar navbar-expand-md navbar-light fixed-top scrolling-navbar navbar-transparent">
+
+    <div class="container-fluid">
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="{{ url_for('home') }}">
+            <h1 style="font-size: 1.1rem;">ĐIỆNMÁYXANHLÈ</h1>
+            <!-- <i class="fab fa-mdb fa-3x" alt="mdb logo"></i> -->
+        </a>
+
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+            aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
+            <!-- Right -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('cart') }}" class="nav-link navbar-link-2 waves-effect">
+                        <span id="cart__counter" class="badge badge-pill red">
+                            {{ cart_details.total_quantity }}
+                        </span>
+                        <i class="fas fa-shopping-cart pl-0"></i>
+                    </a>
+                </li>
+                
+                <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink3" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="true">
+                        <i class="united kingdom flag m-0"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#!">Action</a>
+                        <a class="dropdown-item" href="#!">Another action</a>
+                        <a class="dropdown-item" href="#!">Something else here</a>
+                    </div>
+                </li> -->
+                {% for category in categories %}
+                <li class="nav-item {% if 'category_id' in request.args and category.id==request.args.category_id|int %}active{% endif %} ">
+                    <a href="{{ url_for('home', category_id=category.id) }}" class="nav-link waves-effect">
+                        {{ category.name }}
+                    </a>
+                </li>
+                {% endfor %}
+
+                {% if current_user.is_authenticated %}
+
+                    {% with name=current_user.name, email=current_user.email %}
+
+                        {% include './user/components/user_profile.html' %}
+
+                    {% endwith %}
+
+                {% else %}
+
+                    <li class="nav-item">
+                        <a href="{{ url_for('user_login') }}" class="nav-link waves-effect">
+                            Log In
+                        </a>
+                    </li>
+                    <li class="nav-item pl-2 mb-2 mb-md-0">
+                        <a href="{{ url_for('user_register') }}" type="button"
+                            class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light">
+                            Sign Up</a>
+                    </li>
+
+                {% endif %}
+                
+            </ul>
+
+        </div>
+        <!-- Links -->
+    </div>
+
+</nav>
+<!-- Navbar -->

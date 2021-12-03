@@ -2,7 +2,6 @@ import os
 import sys
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_admin import Admin
 from flask_login import LoginManager
 
 import cloudinary
@@ -18,7 +17,6 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
 
-admin = Admin(app, name='ĐiệnMáyXanhLè Admin', template_mode='bootstrap4')
 
 cloudinary.config(
     cloud_name=os.getenv('CLOUD_NAME'),
