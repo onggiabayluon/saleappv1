@@ -5,16 +5,19 @@
 {% endblock head %}
 
 
-{% block body %}
-    <div class="jumbotron jumbotron-image color-grey-light"
-        style="background-image: url('https://mdbootstrap.com/img/Photos/Others/clothes(5)-crop.jpg'); height: 400px;">
-        <div class="mask rgba-black-strong d-flex align-items-center h-100">
-            <div class="container text-center white-text py-5">
-                <h1 class="mb-0">My Cart</h1>
-            </div>
+{% block jumbotron %}
+<div class="jumbotron jumbotron-image color-grey-light"
+    style="background-image: url('https://mdbootstrap.com/img/Photos/Others/clothes(5)-crop.jpg'); height: 400px;">
+    <div class="mask rgba-black-strong d-flex align-items-center h-100">
+        <div class="container text-center white-text py-5">
+            <h1 class="mb-0">My Cart</h1>
         </div>
     </div>
-    
+</div>
+{% endblock jumbotron %}
+
+
+{% block body %}
     <section class="cart container mt-5" id="cart">
         <div class="row">
 
@@ -45,7 +48,7 @@
                             <tr>
                                 <th scope="row" class="border-0">
                                     <div class="p-2">
-                                        <img src="{{ cart.image }}" alt="{{ cart.name }}" width="70" height="70"
+                                        <img src="https://res.cloudinary.com/dwajvm53v/image/fetch/w_263,q_auto,f_auto/{{ cart.image }}" alt="{{ cart.name }}" width="70" height="81"
                                             class="img-fluid rounded shadow-sm">
                                         <div class="ml-3 d-inline-block align-middle">
                                             <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">
@@ -107,11 +110,15 @@
                                 <h5 class="font-weight-bold">{{ "{:,.0f}".format(cart_details.total_amount) }} VNĐ</h5>
                             </li>
                         </ul>
-                        <a href="#" 
-                        onclick="pay()"
-                        class="btn btn-dark rounded-pill py-2 btn-block">
-                            Procceed to checkout
-                        </a>
+
+                        {% if current_user.is_authenticated %}
+                            <a href="#" onclick="pay()" class="btn btn-dark rounded-pill py-2 btn-block p-3">
+                                Procceed to checkout
+                            </a>
+                        {% else %}
+                            <p class="bg-warning rounded-pill p-3">Please <a class="text-uppercase font-weight-bold" href="{{ url_for('user_login', next='cart') }}">Login</a> to Proceed Payment </p>
+                        {% endif %}
+
                     </div>
                 </div>
             </div> <!-- End Checkout table -->

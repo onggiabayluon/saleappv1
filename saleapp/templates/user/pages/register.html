@@ -5,7 +5,7 @@
 {% endblock head %}
 
 
-{% block body %}
+{% block jumbotron %}
 <div class="jumbotron color-grey-light mt-70">
     <div class="d-flex align-items-center h-100">
         <div class="container text-center py-5">
@@ -13,7 +13,10 @@
         </div>
     </div>
 </div>
+{% endblock jumbotron %}
 
+
+{% block body %}
 <section class="register container mt-4" id="register">
 
     {% include './user/layout/error_msg.html' %}

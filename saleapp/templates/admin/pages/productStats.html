@@ -1,0 +1,178 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+
+{% if current_user.is_authenticated %}
+<section class="chart container mt-4" id="chart" style="min-height: 300px;">
+    
+    {% include './admin/layout/error_msg.html' %}
+    
+   
+    <h1 class="bg-light px-4 py-3 text-uppercase h4"> Welcome {{ current_user.name }} </h1>
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Revenue</th>
+                <!-- <th scope="col">Category</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_stat in product_stats %}
+            <tr>
+                <th scope="row">{{ product_stat[0] }}</th>
+                <td>{{ product_stat[1] }}</td>
+                <td>{{ "{:,.0f}".format(product_stat[2]) }} VNĐ</td>
+                <!-- <td>@mdo</td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+
+    
+</section>
+
+<section class="productRevenue container mb-4" id="productRevenue">
+
+    <h2 class="bg-light px-4 py-3 text-uppercase font-weight-bold h4">Product Revenue Chart</h2>
+
+    <form class="mt-4 mb-4">
+        <div class="form-group">
+            <input list="suggestion" class="form-control" name="kw" type="search" placeholder="Search" aria-label="Search">
+            <datalist id="suggestion">
+                {% if product_stats %}    
+                {% for product_stat in product_stats[:10] %}
+                <option value="{{ product_stat.name }}">{{ product_stat.name }}</option>
+                {% endfor %}
+                {% endif %}
+            </datalist>
+        </div>
+        <div class="input-group mb-4">
+            <input class="form-control mr-4" name="from_date" type="date">
+            <input class="form-control ml-4" name="to_date" type="date">
+        </div>
+        <div class="input-group-append">
+            <button class="btn btn-block btn-secondary" type="submit">Search</button>
+        </div>
+    </form>
+
+    <div>
+        <canvas id="productRevenueChart" width="400" height="400"></canvas>
+    </div>
+
+</section>
+
+<section class="productRevenueThisYear container mb-4" id="productRevenueThisYear">
+
+    <h2 class="bg-light px-4 py-3 text-uppercase font-weight-bold h4">Product Revenue Chart in {{ year }}</h2>
+
+    <form class="mt-4 mb-4">
+        <div class="input-group mb-4">
+            <input class="form-control mr-4" min="2000" name="year" type="number" placeholder="Type Year">
+            <button class="btn btn-secondary ml-4" type="submit">Search</button>
+        </div>
+        <div class="input-group-append">
+            
+        </div>
+    </form>
+
+    <div>
+        <canvas id="monthChart" width="400" height="400"></canvas>
+    </div>
+
+</section>
+
+
+{% else %}
+<section class="authentication container" id="authentication">
+    <h1 class="text-center">LOG IN</h1>
+    <form method="post" action="{{ url_for('admin_login') }}">
+        <div class="form-group">
+            <label for="name">UserName:</label>
+            <input name="username" type="text" class="form-control" id="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input name="password" type="password" class="form-control" id="password">
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox"> Remember me
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</section>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.1/dist/chart.min.js"></script>
+<script>
+    
+    let labels = [], labels2 = []
+    let data = [], data2 = []
+    let colors = []
+    let borderColors = []
+    let r, b, g
+
+    
+    {% for product_stat in product_stats %}
+
+        labels.push('{{ product_stat[1] }}')
+        data.push({{ product_stat[2] }})
+        
+        r = parseInt(Math.random() * 256)
+        b = parseInt(Math.random() * 256)
+        g = parseInt(Math.random() * 256)
+
+        colors.push(`rgba(${r}, ${g}, ${b}, 0.2)`)
+        borderColors.push(`rgba(${r}, ${g}, ${b}, 1)`)
+
+    {% endfor %}
+
+    {% for products_month_stat in products_month_stats %}
+
+        labels2.push('{{ products_month_stat[0] }}')
+        data2.push({{ products_month_stat[1] }})
+
+    {% endfor %}
+
+    window.onload = function() {
+        const ctx = document.getElementById('productRevenueChart').getContext('2d');
+        const ctx2 = document.getElementById('monthChart').getContext('2d');
+    
+        initChart(ctx, labels, data, 'Products Revenue', 'bar', colors, borderColors)
+        initChart(ctx2, labels2, data2, 'Products Revenue in {{ year }}', 'line', colors, borderColors)
+    }
+
+    function initChart(ctx, labels, data, title, type, colors, borderColors) {
+        
+        const myChart = new Chart(ctx, {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: title,
+                    data: data,
+                    backgroundColor: colors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    };
+    
+</script>
+
+{% endblock %}

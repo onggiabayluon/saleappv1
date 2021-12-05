@@ -11,7 +11,7 @@ from sqlalchemy.types import TypeDecorator
 from saleapp import db
 
 # custom augmented string type: Strip String
-# class String(TypeDecorator):
+# class StrippedString(TypeDecorator):
 #     impl = db.String
 
 #     def process_bind_param(self, value, dialect):
@@ -19,7 +19,7 @@ from saleapp import db
 #         return value.strip() if value else value
 
 #     def copy(self, **kw):
-#         return String(self.impl.length)
+#         return StrippedString(self.impl.length)
 
 
 class BaseModel(db.Model):
@@ -79,7 +79,7 @@ class User(BaseModel, UserMixin):
     name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
-    email = Column(String(50), nullable=False)
+    email = Column(String(50), nullable=False, unique=True)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.now())
     avatar = Column(String(100))
