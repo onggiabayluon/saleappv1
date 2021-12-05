@@ -1,9 +1,9 @@
 import math
 
 import cloudinary.uploader
-from flask import request, session, url_for, jsonify
+from flask import jsonify, request, session, url_for
 from flask.templating import render_template
-from flask_login import login_user, logout_user
+from flask_login import current_user, login_user, logout_user
 from flask_login.utils import login_required
 from werkzeug.utils import redirect
 
@@ -99,6 +99,9 @@ def user_register():
 
 @app.route('/user-login', methods=['GET', 'POST'])
 def user_login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
     err_msg = ""
     if request.method == 'POST':
         username = request.form['username']
@@ -107,7 +110,8 @@ def user_login():
         
         if user:
             login_user(user)
-            return redirect(url_for('home'))
+            next = request.args.get('next', 'home')
+            return redirect(url_for(next))
         else:
             err_msg = "Wrong username or password"
 

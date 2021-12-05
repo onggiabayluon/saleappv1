@@ -1,6 +1,7 @@
 import hashlib
 
 from flask_login import current_user
+from sqlalchemy.sql.expression import extract
 from sqlalchemy.sql.functions import func
 
 from saleapp import app, db
@@ -73,9 +74,47 @@ def cate_stats():
                     .group_by(Category.id).all()
 
 def cate_stats2():
+    """
+    SELECT c.id, c.name, count(p.id)
+    FROM category c left outer join product p on c.id = p.category_id
+    group by c.id, c.name
+    """
     return db.session.query(Category.id, Category.name, func.count(Product.id))\
         .join(Product, Product.category_id.__eq__(Category.id), isouter=True)\
         .group_by(Category.id, Category.name).all()
+
+
+def product_stats(kw=None, from_date=None, to_date=None):
+    # join Thêm bảng Receipt vì ngày tạo receipt nằm ở bảng đó
+    p = db.session.query(Product.id, Product.name,
+                         func.sum(ReceiptDetail.quantity * ReceiptDetail.unit_price))\
+                  .join(ReceiptDetail, ReceiptDetail.product_id.__eq__(Product.id), isouter=True)\
+                  .join(Receipt, Receipt.id.__eq__(ReceiptDetail.receipt_id))\
+                  .group_by(Product.id, Product.name)
+
+    if kw:
+        p = p.filter(Product.name.contains(kw))
+
+    if from_date:
+        p = p.filter(Receipt.created_at.__ge__(from_date))
+
+    if to_date:
+        p = p.filter(Receipt.created_at.__le__(to_date))
+
+    return p.all()
+
+
+def get_products_month_stats_within_year(year):
+    # Select field month, revenue
+    # join table ReceiptDetail by product_id
+    # filter in year by comparing Receipt_created_year and Year you specify
+    # Group by month
+    return db.session.query(extract('month', Receipt.created_at),
+                            func.sum(ReceiptDetail.quantity * ReceiptDetail.unit_price))\
+                     .join(ReceiptDetail, ReceiptDetail.receipt_id.__eq__(Receipt.id))\
+                     .filter(extract('year', Receipt.created_at) == year)\
+                     .group_by(extract('month', Receipt.created_at))\
+                     .order_by(extract('month', Receipt.created_at)).all()
 
 
 def get_cart_checkout(carts):

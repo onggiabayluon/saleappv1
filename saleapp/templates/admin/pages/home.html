@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<section class="register container mt-4" id="register" style="min-height: 392px;">
+<section class="register container mt-4" id="register" style="min-height: 300px;">
     
     {% include './admin/layout/error_msg.html' %}
     
@@ -50,6 +50,66 @@
     </form>
     {% endif %}
 
+    
 </section>
+
+<section class="chart container mb-4" id="chart">
+
+    <canvas id="myChart" width="400" height="400"></canvas>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.1/dist/chart.min.js"></script>
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    let labels = []
+    let data = []
+    let colors = []
+    let borderColors = []
+    let r, b, g
+
+    
+    {% for cate_stat in cate_stats %}
+
+        labels.push('{{ cate_stat[1] }}')
+        data.push({{ cate_stat[2] }})
+        
+        r = parseInt(Math.random() * 256)
+        b = parseInt(Math.random() * 256)
+        g = parseInt(Math.random() * 256)
+
+        colors.push(`rgba(${r}, ${g}, ${b}, 0.2)`)
+        borderColors.push(`rgba(${r}, ${g}, ${b}, 1)`)
+
+    {% endfor %}
+
+    initChart(labels, data, 'doughnut', colors, borderColors)
+
+    function initChart(labels, data, type, colors, borderColors) {
+        const myChart = new Chart(ctx, {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '# of Votes',
+                    data: data,
+                    backgroundColor: colors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    };
+    
+</script>
 
 {% endblock %}

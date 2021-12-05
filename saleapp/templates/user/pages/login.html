@@ -2,20 +2,21 @@
 
 {% block head %}
 <title>{{ title }}</title>
-
 {% endblock head %}
 
 
-
-{% block body %}
+{% block jumbotron %}
 <div class="jumbotron color-grey-light mt-70">
     <div class="d-flex align-items-center h-100">
         <div class="container text-center py-5">
-            <h3 class="mb-0">Sign in</h3>
+            <h3 class="mb-0">Log in</h3>
         </div>
     </div>
 </div>
+{% endblock jumbotron %}
 
+
+{% block body %}
 <section class="login container mt-4" id="login">
 
     {% include './user/layout/error_msg.html' %}
@@ -28,7 +29,7 @@
             <!--Section: Content-->
             <section class="mb-5">
 
-                <form method="post" action="{{ url_for('user_login') }}">
+                <form method="post">
 
                     <div class="md-form md-outline">
                         <input name="username" type="username" id="defaultForm-username" class="form-control">

@@ -5,7 +5,7 @@
             aria-expanded="false">
             <div class="avatar avatar-md avatar-indicators avatar-online">
                 {% if current_user.avatar %}
-                <img src="{{ current_user.avatar }}" class="rounded-circle" width="48" height="48" alt="{{ current_user.name }}" />
+                <img src="https://res.cloudinary.com/dwajvm53v/image/fetch/w_40,h_40,q_auto,f_auto/{{ current_user.avatar }}" class="rounded-circle" width="40" height="40" alt="{{ current_user.name }}" />
                 
                 {% else %}
                 <img src="https://avatars.dicebear.com/api/human/{{ current_user.name }}.svg" class="rounded-circle" width="30" alt="{{ current_user.name }}" />
@@ -18,7 +18,7 @@
                 <div class="d-flex py-2">
                     <div class="avatar avatar-md avatar-indicators avatar-online">
                         {% if current_user.avatar %}
-                        <img src="{{ current_user.avatar }}" class="rounded-circle" width="48" height="48" alt="{{ current_user.name }}" />
+                        <img src="https://res.cloudinary.com/dwajvm53v/image/fetch/w_40,h_40,q_auto,f_auto/{{ current_user.avatar }}" class="rounded-circle" width="40" height="40" alt="{{ current_user.name }}" />
                         {% else %}
                         <img src="https://avatars.dicebear.com/api/human/{{ current_user.name }}.svg" class="rounded-circle" width="30" alt="{{ current_user.name }}" />
                         {% endif %}
