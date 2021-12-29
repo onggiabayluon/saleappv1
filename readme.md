@@ -26,3 +26,7 @@ python -m saleapp.models
 
 # (optional) export dependency to requirement.txt
 pip freeze > requirements.txt
+
+# (optional) Install Invirontment in vscode 
+- py -3 -m venv venv
+- Ctrl Shift P => Select interpreter
